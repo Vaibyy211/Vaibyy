@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+import scrapy
+from ..items import Untitled2Item
+
+class AmazonSpiderSpider(scrapy.Spider):
+    name = 'amazon'
+    start_urls = [
+        'https://www.amazon.in/Apple-iPhone-11-64GB-White/product-reviews/B07XVMCLP7/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews'
+    ]
+
+    def parse(self, response):
+        items = Untitled2Item()
+        product_name = response.css('.a-text-ellipsis .a-link-normal').css('::text').extract()
+        #product_price = response.css('#priceblock_ourprice::text').extract()
+        product_reviews = response.css('.review-text-content span::text').extract()
+        product_ratings =  response.css('#cm_cr-review_list .review-rating .a-icon-alt').css('::text').extract()
+
+        items['product_name'] = product_name
+        #items['product_price'] = product_price
+        items['product_reviews'] = product_reviews
+        items['product_ratings'] = product_ratings
+
+        yield items
